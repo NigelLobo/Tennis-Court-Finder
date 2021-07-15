@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Tennis Courts!</title>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+
+
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='svg-icon' viewBox='0 0 20 20'%3E%3Cpath d='M10,1.375c-3.17,0-5.75,2.548-5.75,5.682c0,6.685,5.259,11.276,5.483,11.469c0.152,0.132,0.382,0.132,0.534,0c0.224-0.193,5.481-4.784,5.483-11.469C15.75,3.923,13.171,1.375,10,1.375 M10,17.653c-1.064-1.024-4.929-5.127-4.929-10.596c0-2.68,2.212-4.861,4.929-4.861s4.929,2.181,4.929,4.861C14.927,12.518,11.063,16.627,10,17.653 M10,3.839c-1.815,0-3.286,1.47-3.286,3.286s1.47,3.286,3.286,3.286s3.286-1.47,3.286-3.286S11.815,3.839,10,3.839 M10,9.589c-1.359,0-2.464-1.105-2.464-2.464S8.641,4.661,10,4.661s2.464,1.105,2.464,2.464S11.359,9.589,10,9.589'%3E%3C/path%3E%3C/svg%3E" type="image/svg+xml">
+</head>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+<style>
+.svg-icon {
+  width: 1em;
+  height: 1em;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: #4691f6;
+}
+
+.svg-icon circle {
+  stroke: #4691f6;
+  stroke-width: 1;
+}
+
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="z-index: 3;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><b>Tennis Court Finder</b></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="https://github.com/NigelLobo" target="_blank" title="Nigel Lobo on Github">My Github</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://github.com/NigelLobo/Tennis-Court-Finder" target="_blank">About the Project</a>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+ 
+    <div id='map' style='width: 70%;height:93.5%;float:left;position: absolute; bottom: 0;'></div>
+    <script>
+    
+    mapboxgl.accessToken = 'API KEY'; // not included for security reasons
+    var map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        center: [-79.3841, 43.6534], // starting position [lng, lat]
+        zoom: 9 // starting zoom
+    });
+    </script>
+
+    <div id="courtsDiv" style="float:right; width:30%;">
+        <br>
+        <div class="d-flex" style="padding:2%;">
+
+            <input class="form-control me-2" type="search" placeholder="Enter an Address" aria-label="Search" style="align-self: center;" id="searchBar">
+            <button class="btn btn-outline-success" type="submit" onclick="getClosestCourts()">Find</button>
+
+        </div>
+        <br>
+
+        <p id="disclaimer" style="text-align: center;color: rgb(202, 202, 199);padding-top: 50%;">Courts will appear here</p>
+        <div class="row">
+            <div class="col-4" style="width: 100%;">
+              <h6 style="padding:2%;color:rgb(127, 127, 131)">Closest Courts to You</h6>
+
+              <div class="list-group">
+                <a href="#" class="list-group-item list-group-item" id="court1"aria-current="true" onclick="setMapCenter(0)">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1" id="CourtName1">Agincourt Park</h4>
+                    <h3 id="Distance1">10.2 km</h3>
+                  </div>
+                  <h6 class="mb-1" id="Address1">120 Yonge Street</h6>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small id="Lights1">Lights: Yes</small>
+                    <small id="Surface1">Surface Material: Coated</small>
+                  </div>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item" id="court2"aria-current="true" onclick="setMapCenter(1)">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1" id="CourtName2">Agincourt Park</h4>
+                    <h3 id="Distance2">10.2 km</h3>
+                  </div>
+                  <h6 class="mb-1" id="Address2">120 Yonge Street</h6>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small id="Lights2">Lights: Yes</small>
+                    <small id="Surface2">Surface Material: Coated</small>
+                  </div>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item" id="court3"aria-current="true" onclick="setMapCenter(2)">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1" id="CourtName3">Agincourt Park</h4>
+                    <h3 id="Distance3">10.2 km</h3>
+                  </div>
+                  <h6 class="mb-1" id="Address3">120 Yonge Street</h6>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small id="Lights3">Lights: Yes</small>
+                    <small id="Surface3">Surface Material: Coated</small>
+                  </div>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item" id="court4"aria-current="true" onclick="setMapCenter(3)">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1" id="CourtName4">Agincourt Park</h4>
+                    <h3 id="Distance4">10.2 km</h3>
+                  </div>
+                  <h6 class="mb-1" id="Address4">120 Yonge Street</h6>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small id="Lights4">Lights: Yes</small>
+                    <small id="Surface4">Surface Material: Coated</small>
+                  </div>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item" id="court5"aria-current="true" onclick="setMapCenter(4)">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1" id="CourtName5">Agincourt Park</h4>
+                    <h3 id="Distance5">10.2 km</h3>
+                  </div>
+                  <h6 class="mb-1" id="Address5">120 Yonge Street</h6>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small id="Lights5">Lights: Yes</small>
+                    <small id="Surface5">Surface Material: Coated</small>
+                  </div>
+                </a>
+
+              </div>
+            </div>
+
+          </div>
+    </div>
+    <script>
+        var courtJSON = []
+        //hide div that shows all the courts intially
+        document.getElementsByClassName("col-4")[0].style.visibility = "hidden";
+
+        function populate(someJSON) {
+
+          courtJSON = someJSON;
+          document.getElementsByClassName("col-4")[0].style.visibility = "visible";
+          try {
+            document.getElementById("courtsDiv").removeChild(document.getElementById("disclaimer"));
+          }
+          catch (err) {
+
+          }
+
+
+          for (let i = 0; i < 5; i++) {
+            var courtOneName = document.getElementById("CourtName" + String(i + 1));
+            courtOneName.innerHTML = someJSON[i]["Tennis Court Area"];
+            let courtOneDistance = document.getElementById("Distance"  + String(i+ 1));
+            courtOneDistance.innerHTML = someJSON[i]["Distance"] + " km";
+            let courtOneAddress = document.getElementById("Address"  + String(i+ 1));
+            courtOneAddress.innerHTML = someJSON[i]["ADDRESS"];
+            let courtOneLights = document.getElementById("Lights" + String(i+ 1));
+            courtOneLights.innerHTML = "Lights: " + someJSON[i]["LIGHTS"];
+            let courtOneSurface = document.getElementById("Surface" + String(i+ 1));
+            courtOneSurface.innerHTML = "Surface Material: " + someJSON[i]["Surface material"];
+
+            let marker = new mapboxgl.Marker()
+              .setLngLat([someJSON[i]["coordArray"][1], someJSON[i]["coordArray"][0]])
+              .addTo(map);
+          }
+        }
+        function setHomeMarker(coordJSON) {
+          let homeMarker = new mapboxgl.Marker({
+              color: "#FF0000"
+            }).setLngLat([coordJSON[1], coordJSON[0]])
+            .addTo(map);
+        }
+
+
+        function getClosestCourts() {
+            fetch("https://nigel675.pythonanywhere.com/getClosest/address=" + document.getElementById("searchBar").value)
+                .then(response => response.json())
+                .then(json => populate(json));
+
+              fetch("https://nigel675.pythonanywhere.com/getLatLng/address=" + document.getElementById("searchBar").value)
+                .then(response => response.json())
+                .then(json => setHomeMarker(json));
+        }
+
+        function setMapCenter(id) {
+          map.setCenter([courtJSON[id]["coordArray"][1],courtJSON[id]["coordArray"][0]]);
+          map.setZoom(18);
+        }
+
+        //create a function that using map.setCenter([-76.32]) when we click on a court item on the side bar
+        // the map will automatically go to that point
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+</body>
+</html>
