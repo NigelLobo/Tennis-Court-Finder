@@ -1,5 +1,5 @@
 # Tennis-Court-Finder
-Find Tennis Courts near you within Toronto. Live demo: https://nigel675.pythonanywhere.com/find
+Find Tennis Courts Near You within Toronto. Live demo: https://nigel675.pythonanywhere.com/find
 
 # About the Project
 This project is a data visualization tool that utilizes publically available datasets from the City of Toronto. Users enter an address and are shown the 5 closest tennis courts to them.
