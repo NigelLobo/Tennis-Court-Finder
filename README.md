@@ -4,7 +4,7 @@ Find Tennis Courts Near You within Toronto.
 Live demo: https://nigel675.pythonanywhere.com/find
 
 # About the Project
-This project is a data visualization tool that utilizes publically available datasets from the City of Toronto. Users enter an address and the 5 closest tennis courts are calculated and displayed on an interactive map. 
+This project is a data visualization tool that utilizes publicly available datasets from the City of Toronto. Users enter an address and the 5 closest tennis courts are calculated and displayed on an interactive map. 
 
 # Frameworks and Languages
 The <b>Django</b> web framework is used to serve HTML files, process data related GET requests to the backend, and return responses to the frontend.
