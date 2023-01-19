@@ -14,3 +14,5 @@ The <b>Django</b> web framework is used to serve HTML files, process data relate
 <b>HTML, CSS, Javascript</b> are all used in tandem to create a functional and visually appealing frontend that is able to query data from the backend.
 
 <b>Bootstrap</b> is used to improve the aesthetics and responsiveness of the user interface's elements.
+
+<sub>Completed Aug. 2020</sub>
